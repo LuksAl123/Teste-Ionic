@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-menu-button>
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title>Reciclica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list color="success">
+    <ion-item color="success">
+      <ion-avatar slot="start">
+        <img src="https://s1.static.brasilescola.uol.com.br/img/2019/09/alan-turing-be.jpg" />
+      </ion-avatar>
+      <ion-label>
+        <h1>Alan Turing</h1>
+        <p>Arrecadado: <span class="money">$15,00</span></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <app-pickup-call-card [hasHeader]="true" [hasFooter]="true"></app-pickup-call-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
