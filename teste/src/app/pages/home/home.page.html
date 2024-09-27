@@ -28,11 +28,11 @@
         Último ponto de coleta
       </ion-card-subtitle>
     </ion-card-header>
-    <ion-button color="success" fill="clear" size="full" footer>Ver tudo</ion-button>
+    <ion-button color="success" fill="clear" size="full" footer (click)="goToPickupCalls()">Ver tudo</ion-button>
   </app-pickup-call-card>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="success">
+    <ion-fab-button color="success" (click)="newPickupCall()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
