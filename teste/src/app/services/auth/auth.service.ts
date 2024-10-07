@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/pages/model/user/User';
-import { Auth, sendPasswordResetEmail, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { sendPasswordResetEmail, setPersistence, browserLocalPersistence, signInWithEmailAndPassword } from 'firebase/auth';
+import { Auth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  auth = inject(Auth);
 
-  constructor(private auth: Auth) { } // *
-
-  recoverEmailPassword(email: string) : Observable<void> {
+  recoverEmailPassword(email: string): Observable<void> {
     return new Observable<void>(observer => {
       sendPasswordResetEmail(this.auth, email).then(() => {
         observer.next();
@@ -18,24 +18,26 @@ export class AuthService {
       }).catch(error => {
         observer.error(error);
         observer.complete();
-      })
-    })
+      });
+    });
   }
 
-  login(email: string, password: string) : Observable<User>{
+  login(email: string, password: string): Observable<User> {
     return new Observable<User>(observer => {
-      setTimeout(() => {
-        if (email == "error@email.com"){
-          observer.error({message: 'User not found'});
-          observer.next();
-        } else {
-          const user = new User();
-          user.email = email;
-          user.id = "userId";
-          observer.next(user);
-        }
+      setPersistence(this.auth, browserLocalPersistence).then(() => {
+        return signInWithEmailAndPassword(this.auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            observer.next({ email, id: user.uid });
+            observer.complete();
+          }).catch(error => {
+            observer.error(error);
+            observer.complete();
+          });
+      }).catch(error => {
+        observer.error(error);
         observer.complete();
-      }, 3000)
-    })
+      });
+    });
   }
-} 
+}
