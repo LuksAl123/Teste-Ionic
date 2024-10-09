@@ -8,93 +8,87 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        O que você quer fazer com o lixo reciclável?
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-radio-group>
-        
+  <form [formGroup]="registerForm.getForm()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Contato
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
         <ion-item>
-          <ion-label>Eu quero comprar</ion-label>
-          <ion-radio value="CLIENTE" slot="start"></ion-radio>
+          <ion-label position="floating">Nome</ion-label>
+          <ion-input type="text" formControlName="name"></ion-input>
         </ion-item>
-
+        <app-error-message [field]="registerForm.getForm().get('name')" error="required" message="Nome é obrigatório"></app-error-message>
         <ion-item>
-          <ion-label>Eu quero vender</ion-label>
-          <ion-radio value="PARCEIRO" slot="start"></ion-radio>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
         </ion-item>
-
-      </ion-radio-group>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        Contato
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Nome</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input type="email"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Senha</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Confirmar senha</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Número de telefone</ion-label>
-        <ion-input type="tel"></ion-input>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        Informações de Endereço
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Endereço</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Número</ion-label>
-        <ion-input type="tel"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Bairro</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Complemento</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">CEP</ion-label>
-        <ion-input type="tel"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Estado</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Cidade</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-  <ion-button size="full" color="light" (click)="register()">Registrar</ion-button>
+        <app-error-message [field]="registerForm.getForm().get('email')" error="required" message="Email é obrigatório"></app-error-message>
+        <app-error-message [field]="registerForm.getForm().get('email')" error="email" message="Email é inválido"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Senha</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('password')" error="required" message="Senha é obrigatória"></app-error-message>
+        <app-error-message [field]="registerForm.getForm().get('password')" error="minlength" message="Mínimo de 6 caracteres"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Confirmar senha</ion-label>
+          <ion-input type="password" formControlName="repeatPassword"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('repeatPassword')" error="isntMatching" message="Senha e Confirmação de Senha são diferentes"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Número de telefone</ion-label>
+          <ion-input type="tel" formControlName="phone"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('phone')" error="required" message="Telefone é obrigatório"></app-error-message>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Informações de Endereço
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content formGroupName="address">
+        <ion-item>
+          <ion-label position="floating">Endereço</ion-label>
+          <ion-input type="text" formControlName="street"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('street')" error="required" message="Endereço é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Número</ion-label>
+          <ion-input type="tel" formControlName="number"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('number')" error="required" message="Número é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Bairro</ion-label>
+          <ion-input type="text" formControlName="neighborhood"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('neighborhood')" error="required" message="Bairro é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Complemento</ion-label>
+          <ion-input type="text" formControlName="complement"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('complement')" error="required" message="Complemento é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">CEP</ion-label>
+          <ion-input type="tel" formControlName="zipCode"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('zipCode')" error="required" message="CEP é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Estado</ion-label>
+          <ion-input type="text" formControlName="state"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('state')" error="required" message="Estado é obrigatório"></app-error-message>
+        <ion-item>
+          <ion-label position="floating">Cidade</ion-label>
+          <ion-input type="text" formControlName="city"></ion-input>
+        </ion-item>
+        <app-error-message [field]="registerForm.getForm().get('address').get('city')" error="required" message="Cidade é obrigatória"></app-error-message>
+      </ion-card-content>
+    </ion-card>
+    <ion-button size="full" color="light" (click)="register()">Registrar</ion-button>
+  </form>
 </ion-content>
