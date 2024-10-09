@@ -34,9 +34,6 @@ export class AuthService {
             observer.error(error);
             observer.complete();
           });
-      }).catch(error => {
-        observer.error(error);
-        observer.complete();
       });
     });
   }
