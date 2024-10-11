@@ -1,14 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/pages/model/user/User';
+import { User } from 'src/app/model/user/User';
 import { sendPasswordResetEmail, setPersistence, browserLocalPersistence, signInWithEmailAndPassword } from 'firebase/auth';
 import { Auth } from '@angular/fire/auth';
+import { UserRegister } from 'src/app/model/user/UserRegister';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   auth = inject(Auth);
+
+  register(userRegister: UserRegister) : Observable<void> {
+    return new Observable<void>(observer => {
+      setTimeout(() => {
+        if (userRegister.email == "error@email.com") {
+          observer.error({message: "email is already registered"});
+        } else {
+          observer.next();
+        }
+        observer.complete();
+      }, 3000)
+    })
+  }
 
   recoverEmailPassword(email: string): Observable<void> {
     return new Observable<void>(observer => {

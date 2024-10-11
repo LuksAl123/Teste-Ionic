@@ -6,7 +6,7 @@ import { AppState } from 'src/store/AppState';
 import { Store } from '@ngrx/store';
 import { show, hide } from 'src/store/loading/loading.actions';
 import { login, recoverPassword } from 'src/store/login/login.actions';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { LoginState } from 'src/store/login/LoginState';
 import { Subscription } from 'rxjs';
 
@@ -22,7 +22,7 @@ export class LoginPage implements OnInit, OnDestroy {
   loginStateSubscription: Subscription; //Alteração ChatGPT
 
   constructor(private router: Router, private formBuilder: FormBuilder, private store: Store<AppState>, 
-    private toastController: ToastController) { }
+    private toastController: ToastController, private navController: NavController) { }
 
   ngOnInit() {
     this.form = new LoginPageForm(this.formBuilder).createForm();
@@ -53,7 +53,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   private onIsLoggedIn(loginState: LoginState){
     if (loginState.isLoggedIn){
-      this.router.navigate(['home']);
+      this.navController.navigateRoot('home');
     }
   }
 
