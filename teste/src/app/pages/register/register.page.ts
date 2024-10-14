@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { RegisterPageForm } from './form/register.page.form';
 import { FormBuilder } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -6,9 +6,13 @@ import { AppState } from 'src/store/AppState';
 import { register } from 'src/store/register/register.actions';
 import { RegisterState } from 'src/store/register/RegisterState';
 import { hide, show } from 'src/store/loading/loading.actions';
-import { ToastController } from '@ionic/angular';
+import { IonInput, ToastController } from '@ionic/angular';
 import { login } from 'src/store/login/login.actions';
 import { Subscription } from 'rxjs';
+import { LocationService } from 'src/app/services/location/location.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+declare var google;
 
 @Component({
   selector: 'app-register',
@@ -17,21 +21,34 @@ import { Subscription } from 'rxjs';
 })
 export class RegisterPage implements OnInit, OnDestroy {
 
+  @ViewChild('autocomplete') autocomplete: IonInput;
+
   registerForm: RegisterPageForm;
 
   registerStateSubscription: Subscription;
 
-  constructor(private formBuilder: FormBuilder, private store: Store<AppState>,
-    private toastController: ToastController) { }
+  constructor(private formBuilder: FormBuilder, private store: Store<AppState>, private geolocation: Geolocation,
+    private toastController: ToastController, private locationService: LocationService) { }
 
   ngOnInit() {
     this.createForm();
 
     this.watchRegisterState();
+
+    this.fillUserAddressWithUserCurrentPosition();
   }
 
   ngOnDestroy() {
     this.registerStateSubscription.unsubscribe();
+  }
+
+  ionViewDidEnter() {
+    this.autocomplete.getInputElement().then((ref: any) => {
+      const autocomplete = new google.maps.places.Autocomplete(ref);
+      autocomplete.addListener('place_changed', () => {
+        this.registerForm.setAddress(autocomplete.getPlace())
+      })
+    })
   }
 
   register(){
@@ -40,6 +57,14 @@ export class RegisterPage implements OnInit, OnDestroy {
     if (this.registerForm.getForm().valid){
       this.store.dispatch(register({userRegister: this.registerForm.getForm().value}));
     }
+  }
+
+  private fillUserAddressWithUserCurrentPosition() {
+    this.geolocation.getCurrentPosition().then(position => {
+      this.locationService.geocode(position.coords).subscribe(result => {
+        this.registerForm.setAddress(result);
+      });
+    })
   }
 
   private createForm(){
