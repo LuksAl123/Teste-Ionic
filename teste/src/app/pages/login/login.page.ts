@@ -29,9 +29,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
     this.loginStateSubscription = this.store.select('login').subscribe(loginState => {
       this.onIsRecoveredPassword(loginState);
-  
       this.onIsLoggedIn(loginState);
-
       this.onError(loginState);
       this.toggleLoading(loginState);
     });
